@@ -11,7 +11,7 @@ import UIKit
 
 enum AnalyticEventType {
     case viewVisited
-    case click(Int)
+    case click(Any)
 }
 
 enum AnalyticEventNamespace {
@@ -37,13 +37,13 @@ extension IAnalyticLoggable where Self: UIViewController {
         switch type {
         case .viewVisited:
             appendViewVisited(params: params)
-        case .click(let buttonId):
-            appendButtonClicked(buttonId: buttonId, params: params)
+        case .click(let clickedObject):
+            appendObjectClicked(clickedObject: clickedObject, params: params)
         }
     }
     
     func appendViewVisited(params: [String: Any]? = nil) {
-        var parentId: Int = 0
+        var parentId: Int = analyticView.id
         if let navController = navigationController {
             if let pController = getViewControllerFromNav(navController: navController) {
                 parentId = pController.analyticView.id
@@ -59,8 +59,11 @@ extension IAnalyticLoggable where Self: UIViewController {
         print("View id \(analyticView.id), parent id: \(parentId)")
     }
     
-    func appendButtonClicked(buttonId: Int, params: [String: Any]? = nil) {
-        print("Button clicked View id \(buttonId), parent id: \(analyticView.id)")
+    func appendObjectClicked(clickedObject: Any, params: [String: Any]? = nil) {
+        if let button = clickedObject as? UIButton {
+            print("Button clicked View id \(button.tag), parent id: \(analyticView.id)")
+        }
+//
     }
     
     func getViewControllerFromNav(navController: UINavigationController?, which: WhichNavController = .previous) -> IAnalyticLoggable? {

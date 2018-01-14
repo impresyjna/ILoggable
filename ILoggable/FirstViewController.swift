@@ -20,8 +20,8 @@ class FirstViewController: UIViewController, IAnalyticLoggable {
     }
 
     
-    @IBAction func pushSecondView(_ sender: UIButton) {
-        appendEvent(type: .click(sender.tag))
+    @IBAction func pushSecondView(_ sender: Any) {
+        appendEvent(type: .click(sender))
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let controller = storyboard.instantiateViewController(withIdentifier: "SecondViewController")
         self.navigationController?.pushViewController(controller, animated: true)
